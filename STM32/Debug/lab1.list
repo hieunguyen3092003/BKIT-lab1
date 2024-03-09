@@ -31,23 +31,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  13 .comment      00000043  00000000  00000000  0002003c  2**0
                   CONTENTS, READONLY
- 14 .debug_info   00008aa6  00000000  00000000  0002007f  2**0
+ 14 .debug_info   00008aea  00000000  00000000  0002007f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_abbrev 00001662  00000000  00000000  00028b25  2**0
+ 15 .debug_abbrev 00001681  00000000  00000000  00028b69  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_aranges 00000988  00000000  00000000  0002a188  2**3
+ 16 .debug_aranges 00000988  00000000  00000000  0002a1f0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_rnglists 00000755  00000000  00000000  0002ab10  2**0
+ 17 .debug_rnglists 00000755  00000000  00000000  0002ab78  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_macro  0001fd13  00000000  00000000  0002b265  2**0
+ 18 .debug_macro  0001fd1d  00000000  00000000  0002b2cd  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   0000a98d  00000000  00000000  0004af78  2**0
+ 19 .debug_line   0000a97a  00000000  00000000  0004afea  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    000c4c90  00000000  00000000  00055905  2**0
+ 20 .debug_str    000c4cda  00000000  00000000  00055964  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  00002754  00000000  00000000  0011a598  2**2
+ 21 .debug_frame  00002754  00000000  00000000  0011a640  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 0000006a  00000000  00000000  0011ccec  2**0
+ 22 .debug_line_str 0000006a  00000000  00000000  0011cd94  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -403,7 +403,7 @@ int main(void)
  80004ec:	2b00      	cmp	r3, #0
  80004ee:	d0fa      	beq.n	80004e6 <main+0x22>
 	  {
-		  if(HAL_GPIO_ReadPin(GPIOE, DEBUG_LED_Pin) == SET){
+		  if(HAL_GPIO_ReadPin(GPIOE, DEBUG_LED_Pin) == GPIO_PIN_SET){
  80004f0:	2110      	movs	r1, #16
  80004f2:	480e      	ldr	r0, [pc, #56]	; (800052c <main+0x68>)
  80004f4:	f000 fd4c 	bl	8000f90 <HAL_GPIO_ReadPin>
@@ -607,9 +607,9 @@ static void MX_TIM2_Init(void)
  8000620:	4b1d      	ldr	r3, [pc, #116]	; (8000698 <MX_TIM2_Init+0x94>)
  8000622:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
  8000626:	601a      	str	r2, [r3, #0]
-  htim2.Init.Prescaler = 16800-1;
+  htim2.Init.Prescaler = 8400-1;
  8000628:	4b1b      	ldr	r3, [pc, #108]	; (8000698 <MX_TIM2_Init+0x94>)
- 800062a:	f244 129f 	movw	r2, #16799	; 0x419f
+ 800062a:	f242 02cf 	movw	r2, #8399	; 0x20cf
  800062e:	605a      	str	r2, [r3, #4]
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
  8000630:	4b19      	ldr	r3, [pc, #100]	; (8000698 <MX_TIM2_Init+0x94>)
@@ -744,15 +744,15 @@ static void MX_GPIO_Init(void)
  8000704:	683b      	ldr	r3, [r7, #0]
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(DEBUG_LED_GPIO_Port, DEBUG_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, DEBUG_LED_Pin|Y0_Pin|Y1_Pin, GPIO_PIN_RESET);
  8000706:	2200      	movs	r2, #0
- 8000708:	2110      	movs	r1, #16
+ 8000708:	2170      	movs	r1, #112	; 0x70
  800070a:	480b      	ldr	r0, [pc, #44]	; (8000738 <MX_GPIO_Init+0x9c>)
  800070c:	f000 fc58 	bl	8000fc0 <HAL_GPIO_WritePin>
 
-  /*Configure GPIO pin : DEBUG_LED_Pin */
-  GPIO_InitStruct.Pin = DEBUG_LED_Pin;
- 8000710:	2310      	movs	r3, #16
+  /*Configure GPIO pins : DEBUG_LED_Pin Y0_Pin Y1_Pin */
+  GPIO_InitStruct.Pin = DEBUG_LED_Pin|Y0_Pin|Y1_Pin;
+ 8000710:	2370      	movs	r3, #112	; 0x70
  8000712:	60fb      	str	r3, [r7, #12]
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
  8000714:	2301      	movs	r3, #1
@@ -763,7 +763,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
  800071c:	2300      	movs	r3, #0
  800071e:	61bb      	str	r3, [r7, #24]
-  HAL_GPIO_Init(DEBUG_LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
  8000720:	f107 030c 	add.w	r3, r7, #12
  8000724:	4619      	mov	r1, r3
  8000726:	4804      	ldr	r0, [pc, #16]	; (8000738 <MX_GPIO_Init+0x9c>)

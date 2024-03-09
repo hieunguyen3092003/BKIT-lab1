@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "softwareTimer.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -100,7 +99,7 @@ int main(void)
   {
 	  if(getTimer1Flag())
 	  {
-		  if(HAL_GPIO_ReadPin(GPIOE, DEBUG_LED_Pin) == SET){
+		  if(HAL_GPIO_ReadPin(GPIOE, DEBUG_LED_Pin) == GPIO_PIN_SET){
 			  setTimer1(4000);
 			  HAL_GPIO_WritePin(GPIOE, DEBUG_LED_Pin, RESET);
 		  }
@@ -182,7 +181,7 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 16800-1;
+  htim2.Init.Prescaler = 8400-1;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 10-1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -225,14 +224,14 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(DEBUG_LED_GPIO_Port, DEBUG_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, DEBUG_LED_Pin|Y0_Pin|Y1_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : DEBUG_LED_Pin */
-  GPIO_InitStruct.Pin = DEBUG_LED_Pin;
+  /*Configure GPIO pins : DEBUG_LED_Pin Y0_Pin Y1_Pin */
+  GPIO_InitStruct.Pin = DEBUG_LED_Pin|Y0_Pin|Y1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(DEBUG_LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
