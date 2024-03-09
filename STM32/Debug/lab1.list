@@ -419,11 +419,11 @@ int main(void)
   uint8_t yellow_counter = yellow_time;
  80004fe:	787b      	ldrb	r3, [r7, #1]
  8000500:	713b      	strb	r3, [r7, #4]
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
 	  if(getFlagTimer2())
  8000502:	f000 f991 	bl	8000828 <getFlagTimer2>
  8000506:	4603      	mov	r3, r0
@@ -734,9 +734,9 @@ static void MX_TIM2_Init(void)
  80006b0:	4b1d      	ldr	r3, [pc, #116]	; (8000728 <MX_TIM2_Init+0x94>)
  80006b2:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
  80006b6:	601a      	str	r2, [r3, #0]
-  htim2.Init.Prescaler = 16800-1;
+  htim2.Init.Prescaler = 8400-1;
  80006b8:	4b1b      	ldr	r3, [pc, #108]	; (8000728 <MX_TIM2_Init+0x94>)
- 80006ba:	f244 129f 	movw	r2, #16799	; 0x419f
+ 80006ba:	f242 02cf 	movw	r2, #8399	; 0x20cf
  80006be:	605a      	str	r2, [r3, #4]
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
  80006c0:	4b19      	ldr	r3, [pc, #100]	; (8000728 <MX_TIM2_Init+0x94>)
