@@ -106,31 +106,40 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
 	  if(getFlagTimer2())
 	  {
 		  setTimer2(1000);
 		  if(current_state == ON)
 		  {
+			  if(ON_counter > 0)
+			  {
+				  --ON_counter;
+			  }
 			  if(ON_counter <= 0)
 			  {
 				  current_state = OFF;
 				  ON_counter = ON_duration / 1000;
 			  }
-			  else
-				  --ON_counter;
+
+			  HAL_GPIO_WritePin(GPIOE, DEBUG_LED_Pin, SET);
 		  }
 		  else
 		  {
+			  if (OFF_counter > 0)
+			  {
+				  --OFF_counter;
+			  }
 			  if (OFF_counter <= 0)
 			  {
 				  current_state = ON;
 				  OFF_counter = OFF_duration / 1000;
 			  }
-			  else
-				  --OFF_counter;
+
+			  HAL_GPIO_WritePin(GPIOE, DEBUG_LED_Pin, RESET);
 		  }
 	  }
+    /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -201,7 +210,7 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 16800-1;
+  htim2.Init.Prescaler = 8400-1;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 10-1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -244,14 +253,14 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(DEBUG_LED_GPIO_Port, DEBUG_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, DEBUG_LED_Pin|Y0_Pin|Y1_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : DEBUG_LED_Pin */
-  GPIO_InitStruct.Pin = DEBUG_LED_Pin;
+  /*Configure GPIO pins : DEBUG_LED_Pin Y0_Pin Y1_Pin */
+  GPIO_InitStruct.Pin = DEBUG_LED_Pin|Y0_Pin|Y1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(DEBUG_LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
